@@ -1,0 +1,57 @@
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+public class SecurityTesting {
+    public static void main(String[] args) {
+        System.setProperty("webdriver.chrome.driver", "chromedriver.exe");
+        WebDriver driver = new ChromeDriver();
+
+        try {
+            // Open target web application's login page
+            driver.get("http://example.com/login");
+
+            // SQL Injection Test
+            WebElement usernameField = driver.findElement(By.id("username"));
+            WebElement passwordField = driver.findElement(By.id("password"));
+            WebElement loginButton = driver.findElement(By.id("login"));
+
+            // Inject SQL Payload
+            usernameField.sendKeys("admin");
+            passwordField.sendKeys("' OR '1'='1");
+            loginButton.click();
+
+            // Check if login bypassed
+            if (driver.getPageSource().contains("Welcome") || driver.getCurrentUrl().contains("dashboard")) {
+                System.out.println("SQL Injection Vulnerability Found!");
+            } else {
+                System.out.println("No SQL Injection Vulnerability Detected.");
+            }
+
+            // Navigate to comment section for XSS testing
+            driver.get("http://example.com/comment-section");
+
+            // XSS Test
+            WebElement commentField = driver.findElement(By.id("comment"));
+            WebElement submitButton = driver.findElement(By.id("submit"));
+
+            // Inject XSS Payload
+            commentField.sendKeys("<script>alert('XSS Test')</script>");
+            submitButton.click();
+
+            // Check if alert is triggered
+            try {
+                driver.switchTo().alert().accept();
+                System.out.println("XSS Vulnerability Found!");
+            } catch (Exception e) {
+                System.out.println("No XSS Vulnerability Detected.");
+            }
+
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        } finally {
+            driver.quit(); // Close the browser
+        }
+   }
+}
