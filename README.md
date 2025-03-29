@@ -17,3 +17,21 @@ The above code uses Selenium WebDriver for automating security testing in web ap
 
 
 # OUTPUT
+
+Scenario 1: Application is Vulnerable (SQL Injection & XSS Found)
+If the web application does not have proper security measures in place, the expected output would be:
+
+"SQL Injection Vulnerability Found!
+XSS Vulnerability Found!"
+
+Scenario 2: Application is Secure (No SQLi & No XSS Found)
+If the application has security measures like prepared statements and input validation, the expected output would be:
+
+"No SQL Injection Vulnerability Detected.
+No XSS Vulnerability Detected."
+
+Scenario 3: Partial Vulnerability (Only XSS Found)
+If the login form is secure but the comment section is vulnerable, you might see:
+
+"No SQL Injection Vulnerability Detected.
+XSS Vulnerability Found!"
